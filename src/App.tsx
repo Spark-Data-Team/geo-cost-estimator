@@ -395,7 +395,7 @@ function App() {
             <div className="space-y-3">
               <h2 className="text-xs text-zinc-400 uppercase tracking-wider">Estimation des coûts</h2>
 
-              {calculations.map(({ modelKey, model, pass1Total, pass2Total, webSearchTotal, totalPerRun, totalMonthly, breakdown }) => (
+              {calculations.map(({ modelKey, model, pass1Total, pass2Total, webSearchTotal, totalPerRun, totalMonthly }) => (
                 <div
                   key={modelKey}
                   className={`bg-gradient-to-br ${model.color} backdrop-blur-sm rounded-xl border ${model.border} p-4`}
