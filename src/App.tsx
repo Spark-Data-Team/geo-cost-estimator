@@ -256,7 +256,7 @@ function App() {
                 min="0"
               />
               <div className="flex gap-2">
-                {[100, 500, 1000, 5000].map(preset => (
+                {[50, 100, 500, 750, 1000, 5000].map(preset => (
                   <button
                     key={preset}
                     onClick={() => setPromptCount(preset)}
