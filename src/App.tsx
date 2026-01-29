@@ -144,11 +144,11 @@ const AVG_TOKENS = {
   pass2Output: 100,    // JSON structuré des mentions
 }
 
-// Fréquences de refresh
+// Fréquences de refresh (runs par an)
 const FREQUENCIES = {
-  daily: { label: 'Quotidien', runsPerMonth: 30 },
-  weekly: { label: 'Hebdomadaire', runsPerMonth: 4 },
-  monthly: { label: 'Mensuel', runsPerMonth: 1 },
+  daily: { label: 'Quotidien', runsPerYear: 365 },
+  weekly: { label: 'Hebdomadaire', runsPerYear: 52 },
+  monthly: { label: 'Mensuel', runsPerYear: 12 },
 } as const
 
 type FrequencyKey = keyof typeof FREQUENCIES
@@ -181,7 +181,7 @@ function App() {
     })
   }
 
-  const runsPerMonth = FREQUENCIES[frequency].runsPerMonth
+  const runsPerYear = FREQUENCIES[frequency].runsPerYear
 
   const calculations = useMemo(() => {
     return selectedModels.map(modelKey => {
@@ -202,7 +202,7 @@ function App() {
       const webSearchTotal = (webSearchCalls / 1000) * model.webSearchCost
 
       const totalPerRun = pass1Total + pass2Total + webSearchTotal
-      const totalMonthly = totalPerRun * runsPerMonth
+      const totalYearly = totalPerRun * runsPerYear
 
       return {
         modelKey,
@@ -211,19 +211,13 @@ function App() {
         pass2Total,
         webSearchTotal,
         totalPerRun,
-        totalMonthly,
-        breakdown: {
-          pass1Input: pass1InputCost,
-          pass1Output: pass1OutputCost,
-          pass2Input: pass2InputCost,
-          pass2Output: pass2OutputCost,
-        }
+        totalYearly,
       }
     })
-  }, [promptCount, selectedModels, webSearchPercent, runsPerMonth])
+  }, [promptCount, selectedModels, webSearchPercent, runsPerYear])
 
   const grandTotalPerRun = calculations.reduce((sum, c) => sum + c.totalPerRun, 0)
-  const grandTotalMonthly = calculations.reduce((sum, c) => sum + c.totalMonthly, 0)
+  const grandTotalYearly = calculations.reduce((sum, c) => sum + c.totalYearly, 0)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 text-white">
@@ -338,7 +332,7 @@ function App() {
             </label>
             <div className="grid grid-cols-3 gap-2">
               {(Object.keys(FREQUENCIES) as FrequencyKey[]).map(freq => {
-                const { label, runsPerMonth: runs } = FREQUENCIES[freq]
+                const { label, runsPerYear: runs } = FREQUENCIES[freq]
                 const isSelected = frequency === freq
                 return (
                   <button
@@ -352,7 +346,7 @@ function App() {
                   >
                     <div className="font-medium text-sm">{label}</div>
                     <div className={`text-xs ${isSelected ? 'text-zinc-600' : 'text-zinc-500'}`}>
-                      {runs}x / mois
+                      {runs}x / an
                     </div>
                   </button>
                 )
@@ -395,7 +389,7 @@ function App() {
             <div className="space-y-3">
               <h2 className="text-xs text-zinc-400 uppercase tracking-wider">Estimation des coûts</h2>
 
-              {calculations.map(({ modelKey, model, pass1Total, pass2Total, webSearchTotal, totalPerRun, totalMonthly }) => (
+              {calculations.map(({ modelKey, model, pass1Total, pass2Total, webSearchTotal, totalPerRun, totalYearly }) => (
                 <div
                   key={modelKey}
                   className={`bg-gradient-to-br ${model.color} backdrop-blur-sm rounded-xl border ${model.border} p-4`}
@@ -410,9 +404,9 @@ function App() {
                     </div>
                     <div className="text-right">
                       <div className={`text-xl font-medium ${model.accent}`}>
-                        {formatCurrency(totalMonthly)}
+                        {formatCurrency(totalYearly)}
                       </div>
-                      <div className="text-xs text-zinc-500">par mois</div>
+                      <div className="text-xs text-zinc-500">par an</div>
                       <div className="text-xs text-zinc-600">
                         {formatCurrency(totalPerRun)} / exéc.
                       </div>
@@ -452,14 +446,14 @@ function App() {
                     <div>
                       <div className="text-zinc-400 text-sm">Total {calculations.length > 1 ? 'tous modèles' : ''}</div>
                       <div className="text-xs text-zinc-600">
-                        {formatCurrency(grandTotalPerRun)} × {runsPerMonth}/mois
+                        {formatCurrency(grandTotalPerRun)} × {runsPerYear}/an
                       </div>
                     </div>
                     <div className="text-right">
                       <div className="text-2xl font-medium text-white">
-                        {formatCurrency(grandTotalMonthly)}
+                        {formatCurrency(grandTotalYearly)}
                       </div>
-                      <div className="text-xs text-zinc-500">par mois</div>
+                      <div className="text-xs text-zinc-500">par an</div>
                     </div>
                   </div>
                 </div>
