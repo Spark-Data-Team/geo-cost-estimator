@@ -413,27 +413,30 @@ function App() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-3 pt-3 border-t border-white/10 text-xs">
-                    <div>
-                      <div className="text-zinc-500 mb-0.5">Pass 1</div>
-                      <div className="text-white font-medium">{formatCurrency(pass1Total)}</div>
-                    </div>
-                    <div>
-                      <div className="text-zinc-500 mb-0.5">Pass 2</div>
-                      <div className="text-white font-medium">{formatCurrency(pass2Total)}</div>
-                    </div>
-                    <div>
-                      <div className="text-zinc-500 mb-0.5">
-                        {modelKey.includes('gemini') ? 'Grounding' : 'Web Search'}
+                  <div className="pt-3 border-t border-white/10 text-xs">
+                    <div className="text-zinc-500 mb-2">Détail par exécution ({promptCount} prompts)</div>
+                    <div className="grid grid-cols-3 gap-3">
+                      <div>
+                        <div className="text-zinc-400">Génération</div>
+                        <div className="text-white font-medium">{formatCurrency(pass1Total)}</div>
                       </div>
-                      <div className="text-white font-medium">
-                        {webSearchPercent > 0 ? formatCurrency(webSearchTotal) : '—'}
+                      <div>
+                        <div className="text-zinc-400">Extraction</div>
+                        <div className="text-white font-medium">{formatCurrency(pass2Total)}</div>
                       </div>
-                      {webSearchPercent > 0 && totalPerRun > 0 && (
-                        <div className="text-yellow-500/80 text-xs mt-0.5">
-                          {Math.round((webSearchTotal / totalPerRun) * 100)}% du coût
+                      <div>
+                        <div className="text-zinc-400">
+                          {modelKey.includes('gemini') ? 'Grounding' : 'Web Search'}
                         </div>
-                      )}
+                        <div className="text-white font-medium">
+                          {webSearchPercent > 0 ? formatCurrency(webSearchTotal) : '—'}
+                        </div>
+                        {webSearchPercent > 0 && totalPerRun > 0 && (
+                          <div className="text-yellow-500/80 mt-0.5">
+                            {Math.round((webSearchTotal / totalPerRun) * 100)}% du coût
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
