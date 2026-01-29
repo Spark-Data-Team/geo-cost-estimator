@@ -389,7 +389,7 @@ function App() {
             <div className="space-y-3">
               <h2 className="text-xs text-zinc-400 uppercase tracking-wider">Estimation des coûts</h2>
 
-              {calculations.map(({ modelKey, model, pass1Total, pass2Total, webSearchTotal, totalPerRun, totalYearly }) => (
+              {calculations.map(({ modelKey, model, totalPerRun, totalYearly }) => (
                 <div
                   key={modelKey}
                   className={`bg-gradient-to-br ${model.color} backdrop-blur-sm rounded-xl border ${model.border} p-4`}
@@ -413,33 +413,7 @@ function App() {
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-white/10 text-xs">
-                    <div className="text-zinc-500 mb-2">Détail par exécution ({promptCount} prompts)</div>
-                    <div className="grid grid-cols-3 gap-3">
-                      <div>
-                        <div className="text-zinc-400">Génération</div>
-                        <div className="text-white font-medium">{formatCurrency(pass1Total)}</div>
-                      </div>
-                      <div>
-                        <div className="text-zinc-400">Extraction</div>
-                        <div className="text-white font-medium">{formatCurrency(pass2Total)}</div>
-                      </div>
-                      <div>
-                        <div className="text-zinc-400">
-                          {modelKey.includes('gemini') ? 'Grounding' : 'Web Search'}
-                        </div>
-                        <div className="text-white font-medium">
-                          {webSearchPercent > 0 ? formatCurrency(webSearchTotal) : '—'}
-                        </div>
-                        {webSearchPercent > 0 && totalPerRun > 0 && (
-                          <div className="text-yellow-500/80 mt-0.5">
-                            {Math.round((webSearchTotal / totalPerRun) * 100)}% du coût
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                                  </div>
               ))}
 
               {/* Grand total */}
