@@ -435,6 +435,11 @@ function App() {
                       <div className="text-white font-medium">
                         {webSearchPercent > 0 ? formatCurrency(webSearchTotal) : '—'}
                       </div>
+                      {webSearchPercent > 0 && totalPerRun > 0 && (
+                        <div className="text-yellow-500/80 text-xs mt-0.5">
+                          {Math.round((webSearchTotal / totalPerRun) * 100)}% du coût
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
